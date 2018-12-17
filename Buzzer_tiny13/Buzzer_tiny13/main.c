@@ -6,41 +6,39 @@
  */
 
 #include <avr/io.h>
+int long_delay = 300;
+//int i = 0;
 
-void delay_nop(int delay)
+void delay_nop(long delay)
 {
-	int i = 0;
+	long i = 0;
 	while(i<delay)
 	{
 		i++;
 	}
 }
 
-void setup(void)
+int main(void)
 {
 	DDRB |= (1<<3);
 	DDRB |= (1<<4);
-}
-
-void loop(void)
+	
+while(1)	
 {
-	PORTB =  (1<<3);
+	PORTB = (1<<3);
 	
-	delay_nop(1000);
-	
-	PORTB =  (1<<4);
-	
-	delay_nop(1000);
-}
-
-
-int main(void)
-{
-	setup();
-	
-	while(1)	
+	for(int i = 0;i<long_delay;i++)
 	{
-	loop();		
+		asm volatile("nop");
 	}
-	return 0;
+
+	PORTB = (1<<4);
+
+	for(int i = 0;i<long_delay;i++)
+	{
+		asm volatile("nop");
+	}
+	
+}
+return 0;
 }
